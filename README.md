@@ -4,7 +4,7 @@
 In Progress<img src="img/loading.gif" height="70" align="middle"></img>
 
 ## About
-**Course:** Full Stack Open Course: https://fullstackopen.com/en/
+**Course:** Full Stack Open: https://fullstackopen.com/en/
 
 **Built with:** ReactJS and Node.js 
 
