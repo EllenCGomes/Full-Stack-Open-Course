@@ -15,18 +15,39 @@ const App = () => {
   ];
 
   const [selected, setSelected] = useState(0);
+  const [list, setList] = useState(Array(anecdotes.length).fill(0));
+  const [winner, setWinner] = useState(null);
 
-  const handleClick = () => {
+  const copy = [...list];
+
+  const handleAnectode = () => {
     const random = Math.floor(Math.random() * (anecdotes.length - 1));
-    console.log(random);
     setSelected(random)
+  };
+
+  const handleVote = () => {
+    copy[selected] += 1;
+    setList(copy)
+    setWinner(copy.indexOf(Math.max(...copy)));
+  };
+
+  const hasWinner = (anecdote) => {
+    if (winner != null) {
+      return <><p>{anecdotes[winner]}</p>
+        <p>has {copy[winner]} votes</p></>
+    }
   }
 
   return (
     <div>
-      <p>{anecdotes[selected]}</p>
-      <Button onClick={handleClick} text="next anecdote" />
-    </div>
+      <h3>Anecdote of the day</h3>
+      {anecdotes[selected]}
+      <p>has {copy[selected]} votes</p>
+      <Button onClick={handleVote} text="vote" />
+      <Button onClick={handleAnectode} text="next anecdote" />
+      <h3>Anecdote with most votes</h3>
+      {hasWinner()}
+    </div >
   );
 }
 
