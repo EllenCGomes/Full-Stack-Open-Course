@@ -1,10 +1,12 @@
 import { useState } from "react";
 
-const Button = ({ onClick, value }) => <button onClick={onClick}>{value} </button>
+const Button = ({ onClick, value }) => <button onClick={onClick}>{value}</button>
 
 const Header = ({ title }) => <h3>{title}</h3>
 
-const MainStatistics = ({ isShown, children }) => {
+const StatisticLine = ({ text, value }) => <tr><td>{text}</td><td> {value}</td></tr>
+
+const Statistics = ({ isShown, children }) => {
   if (isShown) {
     return (
       <>{children}</>
@@ -13,8 +15,6 @@ const MainStatistics = ({ isShown, children }) => {
   return <p>No feedback given</p>
 
 }
-
-const Statistics = ({ title, value }) => <p>{title} {value}</p>
 
 
 const App = () => {
@@ -39,14 +39,14 @@ const App = () => {
       <Button onClick={handleNeutral} value="neutral" />
       <Button onClick={handleBad} value="bad" />
       <Header title="Statistics" />
-      <MainStatistics isShown={isShow}>
-        <Statistics title="good" value={good} />
-        <Statistics title="neutral" value={neutral} />
-        <Statistics title="bad" value={bad} />
-        <Statistics title="all" value={all} />
-        <Statistics title="average" value={avg} />
-        <Statistics title="positive" value={positive} />
-      </MainStatistics>
+      <Statistics isShown={isShow}>
+        <StatisticLine text="good" value={good} />
+        <StatisticLine text="neutral" value={neutral} />
+        <StatisticLine text="bad" value={bad} />
+        <StatisticLine text="all" value={all} />
+        <StatisticLine text="average" value={avg} />
+        <StatisticLine text="positive" value={positive} />
+      </Statistics>
     </div>
   );
 }
