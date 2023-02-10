@@ -4,12 +4,28 @@ const Button = ({ onClick, value }) => <button onClick={onClick}>{value}</button
 
 const Header = ({ title }) => <h3>{title}</h3>
 
-const StatisticLine = ({ text, value }) => <tr><td>{text}</td><td> {value}</td></tr>
-
+const StatisticLine = ({ text, value }) => {
+  return (
+    <tr>
+      <td>{text}</td>
+      <td style={{ paddingLeft: "20px" }}>{value}</td>
+    </tr>
+  )
+}
 const Statistics = ({ isShown, children }) => {
   if (isShown) {
     return (
-      <>{children}</>
+      <table>
+        <thead>
+          <tr>
+            <th>Feedback</th>
+            <th>Votes</th>
+          </tr>
+        </thead>
+        <tbody>
+          {children}
+        </tbody>
+      </table>
     )
   }
   return <p>No feedback given</p>
@@ -28,7 +44,7 @@ const App = () => {
 
   const all = good + bad + neutral;
   const avg = (good !== 0 && bad !== 0) ? (good - bad) / all : 0;
-  const positive = (good !== 0) ? `${(good / all) * 100} %` : 0
+  const positive = (good !== 0) ? `${(good / all) * 100}%` : 0
 
   const isShow = (all !== 0) ? true : false
 
