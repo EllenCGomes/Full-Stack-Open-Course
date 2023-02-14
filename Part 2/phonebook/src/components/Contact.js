@@ -1,6 +1,6 @@
 import ContactLine from "./ContactLine";
 
-const Contact = ({ persons }) => {
+const Contact = ({ people, deletePerson }) => {
     return (
         <table>
             <thead>
@@ -10,7 +10,7 @@ const Contact = ({ persons }) => {
                 </tr>
             </thead>
             <tbody>
-                {persons.map(person => <ContactLine key={person.name} person={person} />)}
+                {people.map(person => <ContactLine key={person.name} person={person} onClick={deletePerson} />)}
             </tbody>
         </table>
     )
