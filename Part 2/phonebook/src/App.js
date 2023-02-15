@@ -3,12 +3,16 @@ import peopleService from "./services/people"
 import Contact from "./components/Contact";
 import Filter from "./components/Filter";
 import Form from "./components/Form";
+import Notification from "./components/Notification";
+import "./index.css"
 
 const App = () => {
   const [people, setPeople] = useState([]);
   const [newName, setNewName] = useState("");
   const [newNumber, setNewNumber] = useState("");
   const [filter, setFilter] = useState("");
+  const [addedMessage, setAddedMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     peopleService.getAll().then(initialList => {
@@ -49,23 +53,36 @@ const App = () => {
           setPeople(people.concat(returnedPerson))
           setNewName("");
           setNewNumber("");
+          setAddedMessage(`Added ${personObject.name}`)
+          setTimeout(() => {
+            setAddedMessage(null)
+          }, 2000)
         })
     }
   };
 
   const deletePerson = (event) => {
+    const newList = people.filter(person => event !== person.id);
     peopleService.getPerson(event).then(
       (returnedPerson) => {
         if (window.confirm(`Delete ${returnedPerson.data.name} ?`)) {
-          peopleService.deletePerson(event).then(
-            () => {
-              const newList = people.filter(person => event !== person.id);
-              setPeople(newList);
-            }
-          )
+
+          peopleService.deletePerson(event)
+            .then(() => {
+              setPeople(newList)
+            })
+
         }
       }
     )
+      .catch(error => {
+        const deletedPerson = people.find(person => person.id === event);
+        setErrorMessage(`Information of ${deletedPerson.name} has already been removed from server`)
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 2000)
+        setPeople(newList)
+      })
   }
 
   const handleNameChange = (event) => {
@@ -85,6 +102,8 @@ const App = () => {
   return (
     <div>
       <h1>Phone Book</h1>
+      <Notification message={addedMessage} />
+      <Notification message={errorMessage} />
       <h2>New Contact</h2>
       <Form onSubmit={addContact} onChangeName={handleNameChange} nameValue={newName} onChangeNumber={handleNumberChange} numberValue={newNumber} />
       <h2>Contacts</h2>
