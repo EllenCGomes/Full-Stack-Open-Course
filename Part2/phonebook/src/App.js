@@ -22,7 +22,7 @@ const App = () => {
 
   const updateContact = (event) => {
 
-    const replace = people.find(person => person.name === newName);
+    const replace = people.find(person => person.name.toLowerCase() === newName.toLowerCase());
 
     replace.number = newNumber;
 
@@ -36,15 +36,17 @@ const App = () => {
     event.preventDefault();
 
     if (people.some(person => person.name.toLowerCase() === newName.toLowerCase())) {
-      if (window.confirm(`${newName} is already added to Phone Book. Would you like to replace the old number with a new one?`)) updateContact(event);
+      if (window.confirm(`${newName} is already added to Phone Book. Would you like to replace the old number with a new one?`)) {
+        updateContact(event);
+      }
 
       setNewName("");
       setNewNumber("");
 
     } else {
       const personObject = {
-        name: newName,
-        number: newNumber,
+        name: newName[0].toUpperCase() + newName.substring(1),
+        number: newNumber
       };
 
       peopleService
