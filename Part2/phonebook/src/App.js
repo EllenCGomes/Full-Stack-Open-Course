@@ -60,6 +60,9 @@ const App = () => {
             setAddedMessage(null)
           }, 2000)
         })
+        .catch(error => {
+          setErrorMessage(error.response.data.error)
+        })
     }
   };
 
