@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Blog from "./components/Blog";
 import Notification from "./components/Notification";
+import Toggle from "./components/Toggle";
+import BlogForm from "./components/BlogForm";
 import "./index.css"
 import blogService from "./services/blogs";
 import loginService from "./services/login";
@@ -13,14 +15,11 @@ const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState(null);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
 
 
   useEffect(() => {
     blogService.getAll().then(initialBlogs => setBlogs(initialBlogs))
-  }, [])
+  })
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedUser");
@@ -32,24 +31,33 @@ const App = () => {
     }
   }, [])
 
-  const addBlog = async (event) => {
-    event.preventDefault()
-    const newBlog = {
-      title: title,
-      author: author,
-      url: url
-    }
+  const blogFormRef = useRef();
 
-    const blog = await blogService.create(newBlog);
+  const addBlog = async (newBlog) => {
 
-    setBlogs(blogs.concat(blog))
+    blogFormRef.current.toggleVisibility()
+
+    await blogService.create(newBlog);
+
+
+    // setBlogs(blogs.concat(blog))
+    // console.log("blogs", blogs);
     setAddedMessage(`Saved blog "${newBlog.title}" by ${newBlog.author}!`)
-    setTitle("")
-    setAuthor("")
-    setUrl("")
     setTimeout(() => {
       setAddedMessage(null)
     }, 5000)
+
+  }
+
+  const addLike = async (blog, id) => {
+
+    await blogService.update(blog, id);
+
+  }
+
+  const deleteBlog = async (id) => {
+
+    await blogService.remove(id);
 
   }
 
@@ -75,7 +83,7 @@ const App = () => {
     }
   }
 
-  const handleLogout = event => {
+  const handleLogout = () => {
     window.localStorage.clear()
     setUser(null)
     setUsername("")
@@ -96,23 +104,6 @@ const App = () => {
     </form>
   )
 
-  const blogForm = () => (
-    <form onSubmit={addBlog}>
-      <input style={{ marginBottom: "10px" }} placeholder="title" type="text" value={title} name="title" onChange={({ target }) => {
-        setTitle(target.value)
-      }} />
-      <br />
-      <input style={{ marginBottom: "10px" }} placeholder="author" type="text" value={author} name="author" onChange={({ target }) => {
-        setAuthor(target.value)
-      }} />
-      <br />
-      <input style={{ marginBottom: "10px" }} placeholder="url" type="text" value={url} name="url" onChange={({ target }) => {
-        setUrl(target.value)
-      }} />
-      <br />
-      <button type="submit" style={{ marginBottom: "10px" }}>Save</button>
-    </form>
-  )
 
   return (
     <div>
@@ -131,11 +122,13 @@ const App = () => {
             {user.name} is logged in
             <button onClick={handleLogout} style={{ marginLeft: "20px" }}>Logout</button>
           </div>
-          <h3>New Blog</h3>
-          {blogForm()}
+          <br />
+          <Toggle buttonLabel="New Blog" ref={blogFormRef}>
+            <BlogForm createBlog={addBlog} />
+          </Toggle>
           <h3>Blogs</h3>
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />)}
+          {blogs.sort((a, b) => b.likes - a.likes).map(blog =>
+            <Blog key={blog.id} blog={blog} updateLike={addLike} deleteBlog={deleteBlog} />)}
         </div>
       }
 
