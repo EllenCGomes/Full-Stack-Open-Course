@@ -6,8 +6,8 @@ const Blog = ({ blog, updateLike, deleteBlog }) => {
 
     Blog.propTypes = {
         blog: PropTypes.object.isRequired,
-        updateLike: PropTypes.func.isRequired,
-        deleteBlog: PropTypes.func.isRequired
+        // updateLike: PropTypes.func.isRequired,
+        // deleteBlog: PropTypes.func.isRequired
     }
 
     const showDetails = () => {
@@ -38,17 +38,17 @@ const Blog = ({ blog, updateLike, deleteBlog }) => {
     const display = { display: visible ? "" : "none" };
 
     return (
-        <div style={{ marginBottom: "10px", border: "1px solid black", padding: 8 }}>
+        <div style={{ marginBottom: "10px", border: "1px solid black", padding: 8 }} className="blog">
             <div style={{ marginBottom: "5px" }}>
                 {blog.title} - {blog.author}
-                <button onClick={showDetails} style={{ marginLeft: "10px" }}>{visible ? "hide" : "view"}</button>
+                <button className="button" onClick={showDetails} style={{ marginLeft: "10px" }}>{visible ? "hide" : "view"}</button>
             </div>
-            <div style={display}>
+            <div style={display} className="blogDetails">
                 <div style={{ marginBottom: "10px" }}>{blog.url}</div>
                 <div style={{ marginBottom: "5px" }}>
                     Likes:
                     {blog.likes}
-                    <button onClick={addLike} style={{ marginLeft: "10px" }}>like</button>
+                    <button className="buttonLike" onClick={addLike} style={{ marginLeft: "10px" }}>like</button>
                 </div>
                 <div style={{ marginBottom: "10px" }}>
                     {blog.user.name}

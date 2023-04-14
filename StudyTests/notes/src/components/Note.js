@@ -1,8 +1,9 @@
 const Note = ({ note, toggleImportance }) => {
     const label = note.important ? "make not important" : "make important"
+
     return (
-        <li>
-            {note.content}
+        <li className="note">
+            <span>{note.content}</span>
             <button style={{ marginLeft: "20px" }} onClick={toggleImportance}>{label}</button>
         </li>
     )
