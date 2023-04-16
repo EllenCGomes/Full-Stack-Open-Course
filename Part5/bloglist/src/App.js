@@ -19,7 +19,7 @@ const App = () => {
 
   useEffect(() => {
     blogService.getAll().then(initialBlogs => setBlogs(initialBlogs))
-  })
+  }, [])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem("loggedUser");
@@ -37,11 +37,10 @@ const App = () => {
 
     blogFormRef.current.toggleVisibility()
 
-    await blogService.create(newBlog);
+    const result = await blogService.create(newBlog);
 
+    setBlogs(blogs.concat(result))
 
-    // setBlogs(blogs.concat(blog))
-    // console.log("blogs", blogs);
     setAddedMessage(`Saved blog "${newBlog.title}" by ${newBlog.author}!`)
     setTimeout(() => {
       setAddedMessage(null)
@@ -49,16 +48,25 @@ const App = () => {
 
   }
 
-  const addLike = async (blog, id) => {
+  const addLike = async (blog) => {
 
-    await blogService.update(blog, id);
+    await blogService.update(blog, blog.id);
 
+    const updatedBlog = blogs.map(item => item.id === blog.id ? blog : item)
+    setBlogs(updatedBlog)
   }
 
   const deleteBlog = async (id) => {
 
-    await blogService.remove(id);
+    try {
+      await blogService.remove(id);
 
+      const updatedBlog = blogs.filter(item => item.id !== id)
+
+      setBlogs(updatedBlog)
+    } catch (exception) {
+      setErrorMessage("Cannot remove someone else's blog")
+    }
   }
 
   const handleLogin = async (event) => {
@@ -91,16 +99,16 @@ const App = () => {
   }
 
   const loginForm = () => (
-    <form onSubmit={handleLogin}>
-      <input style={{ marginBottom: "10px" }} placeholder="username" type="text" value={username} name="username" onChange={({ target }) => {
+    <form id="login-form" onSubmit={handleLogin}>
+      <input id="login-username" style={{ marginBottom: "10px" }} placeholder="username" type="text" value={username} name="username" onChange={({ target }) => {
         setUsername(target.value)
       }} />
       <br />
-      <input style={{ marginBottom: "10px" }} placeholder="password" type="password" value={password} name="password" onChange={({ target }) => {
+      <input id="login-password" style={{ marginBottom: "10px" }} placeholder="password" type="password" value={password} name="password" onChange={({ target }) => {
         setPassword(target.value)
       }} />
       <br />
-      <button type="submit">Login</button>
+      <button id="login-button" type="submit">Login</button>
     </form>
   )
 

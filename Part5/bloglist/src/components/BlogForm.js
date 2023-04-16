@@ -28,13 +28,13 @@ const BlogForm = ({ createBlog }) => {
         <div>
             <h3>New Blog</h3>
             <form onSubmit={addBlog}>
-                <input style={{ marginBottom: "10px" }} placeholder="title" type="text" value={title} name="title" onChange={event => setTitle(event.target.value)} />
+                <input id="blog-input-title" style={{ marginBottom: "10px" }} placeholder="title" type="text" value={title} name="title" onChange={event => setTitle(event.target.value)} />
                 <br />
-                <input style={{ marginBottom: "10px" }} placeholder="author" type="text" value={author} name="author" onChange={event => setAuthor(event.target.value)} />
+                <input id="blog-input-author" style={{ marginBottom: "10px" }} placeholder="author" type="text" value={author} name="author" onChange={event => setAuthor(event.target.value)} />
                 <br />
-                <input style={{ marginBottom: "10px" }} placeholder="url" type="text" value={url} name="url" onChange={event => setUrl(event.target.value)} />
+                <input id="blog-input-url" style={{ marginBottom: "10px" }} placeholder="url" type="text" value={url} name="url" onChange={event => setUrl(event.target.value)} />
                 <br />
-                <button type="submit" style={{ marginBottom: "10px" }}>Save</button>
+                <button id="newBlog-submit-button" type="submit" style={{ marginBottom: "10px" }}>Save</button>
             </form>
         </div>
     )
