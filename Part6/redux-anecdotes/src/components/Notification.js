@@ -12,11 +12,6 @@ const Notification = () => {
         padding: "10px",
         marginBottom: "30px"
     }
-    if (notification) {
-        setTimeout(() => {
-            dispatch(removeNotification())
-        }, 5000)
-    }
 
     return <div style={notification ? style : { display: "none" }}>{notification}</div>;
 
