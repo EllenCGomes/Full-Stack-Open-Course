@@ -1,4 +1,7 @@
+import { useAnecdoteValue } from "../AnecdoteContext"
+
 const Notification = () => {
+    const message = useAnecdoteValue()
     const style = {
         border: 'solid',
         padding: 10,
@@ -6,13 +9,17 @@ const Notification = () => {
         marginBottom: 5
     }
 
-    if (true) return null
+    if (message) {
+        return (
+            <div style={style}>
+                {message}
+            </div>
+        )
+    } else {
+        return null
+    }
 
-    return (
-        <div style={style}>
 
-        </div>
-    )
 }
 
 export default Notification

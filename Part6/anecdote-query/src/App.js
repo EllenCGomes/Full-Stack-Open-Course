@@ -1,10 +1,12 @@
+
+import { useAnecdoteDispatch } from "./AnecdoteContext"
 import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import { useQuery, useMutation, useQueryClient } from "react-query"
-import { getAnecdotes, createAnecdote, updateVote } from "./requests"
+import { getAnecdotes, updateVote } from "./requests"
 
 const App = () => {
-
+  const dispatch = useAnecdoteDispatch()
   const queryClient = useQueryClient()
 
   const updateAnecdoteMutation = useMutation(updateVote, {
@@ -28,8 +30,9 @@ const App = () => {
 
   const handleVote = (anecdote) => {
     updateAnecdoteMutation.mutate(anecdote)
+    dispatch({ type: "SET_MESSAGE", payload: `You voted the anecdote "${anecdote.content}"` })
+    setTimeout(() => dispatch({ type: "REMOVE_MESSAGE" }), 5000)
   }
-
 
   return (
     <div>
@@ -39,13 +42,13 @@ const App = () => {
       <AnecdoteForm />
 
       {anecdotes.map(anecdote =>
-        <div key={anecdote.id}>
+        <div key={anecdote.id} style={{ border: "1px solid black", marginBottom: "15px", padding: "10px" }}>
           <div>
-            {anecdote.content}
+            "{anecdote.content}"
           </div>
-          <div>
-            has {anecdote.votes}
-            <button onClick={() => handleVote(anecdote)}>vote</button>
+          <div style={{ marginTop: "5px" }}>
+            has {anecdote.votes} votes
+            <button style={{ marginLeft: "15px" }} onClick={() => handleVote(anecdote)}>vote</button>
           </div>
         </div>
       )}
